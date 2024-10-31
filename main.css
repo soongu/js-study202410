@@ -1,0 +1,34 @@
+/* 드롭다운 기본 스타일 */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu,
+.submenu-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  padding: 12px;
+  min-width: 160px;
+  z-index: 1;
+}
+
+.dropdown-menu a,
+.submenu a {
+  color: black;
+  padding: 8px 12px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-menu a:hover,
+.submenu a:hover {
+  background-color: #ddd;
+}
+
+.show {
+  display: block;
+}
