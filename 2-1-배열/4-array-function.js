@@ -33,5 +33,20 @@ console.log(copy1);
 let copy2 = numbers.slice(); // 둘다 생략시 처음부터 끝까지 -> 전체복제
 console.log(copy2);
 
+// splice() : 배열의 요소를 추가하거나 삭제 (중간에서 작업 가능)
+// 배열 원본이 손상됨 - 안전한 작업을 위해서는 복사하고서 작업
+console.log('=======================');
+
+console.log(foodList);
+
+foodList.splice(2, 1); 
+console.log(foodList);
+
+foodList.splice(0, 1, '마라탕');
+console.log(foodList);
+
+// 중간 삽입 기능
+foodList.splice(2, 0, '짜장면');
+console.log(foodList);
 
 
