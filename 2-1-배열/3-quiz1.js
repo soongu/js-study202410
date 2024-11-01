@@ -13,3 +13,23 @@
 
 // 숫자들을 쌓아놓을 배열
 let numbers = [];
+
+while (numbers.length < 6) {
+  // if (numbers.length === 6) break;
+  // 사용자에게 숫자를 입력받음
+  let num = prompt('숫자를 입력하세요.\n그만두려면 \'그만\'이라고 입력하세요!');
+
+  if (num === '그만') break;
+
+  // 배열에 해당 숫자를 저장
+  numbers.push(+num);
+} // end while
+
+// 배열 총합 구하기
+let total = 0; // 총합 누적 변수
+for (let n of numbers) {
+  total += n;
+}
+alert(`입력한 숫자 목록 [${numbers}]
+입력한 숫자 총합: ${total}`);
+
