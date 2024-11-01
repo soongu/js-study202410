@@ -35,7 +35,8 @@ let myCat = {
   name: '나응',
   age: 4,
   injection: true,
-  favorites: ['낮잠', '털뭉치']
+  favorites: ['낮잠', '털뭉치'],
+  'my hobby': '시비걸기' 
 };
 
 // 객체 프로퍼티 접근하기
@@ -58,6 +59,13 @@ myCat.favorites[1]++; // ( X )
 myCat.favorites[2]++; // ( O )
 
 console.log(myCat);
+
+// 따옴표로 묶여있는 프로퍼티에 접근
+console.log('==================');
+
+console.log(myCat['my hobby']);
+console.log(myDog1['name']);
+
 
 
 
