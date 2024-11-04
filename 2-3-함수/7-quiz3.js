@@ -37,3 +37,22 @@ console.log(`result2: ${result2}`);
 // 단, 0은 짝수취급
 let result3 = isEven(3);
 console.log(`result3: ${result3}`);
+
+
+// n개의 정수중 최소값을 구해서 반환하는 함수
+console.log('=================');
+
+function min(...numberList) {
+  // 최소값
+  let candidate = numberList[0];
+  for (let i = 1; i < numberList.length; i++) {
+    if (numberList[i] < candidate) {
+      candidate = numberList[i];
+    }
+  }
+  return candidate;
+}
+
+// result4에는 -1000이 저장되어야 함.
+let result4 = min(9, 76, -90, -1000, 555, 780, -7777);
+console.log(`result4: ${result4}`);
