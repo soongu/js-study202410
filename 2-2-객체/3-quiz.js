@@ -36,3 +36,45 @@ let userInfo = {
     
   ],
 };
+
+
+
+
+
+while (true) {
+  // 방금 사용자가 입력한 계정이 위 데이터 안에 있는지 여부
+
+  // 사용자의 입력한 아이디 값
+  let inputAccount = prompt('계정을 입력하세요!');
+
+  // 로그인 시도하는 회원의 정보를 백업
+  let currentUser = null;
+
+  // 회원가입 데이터를 반복해서 입력한 아이디가 있는지 확인
+  for (let user of userInfo.userList) {
+  
+    if (inputAccount === user.account) {
+      // 일단 회원가입은 했다
+      currentUser = user;
+      break;
+    }
+  } // end for
+
+  // console.log(currentUser);
+
+  if (currentUser === null) {
+    alert('회원가입부터 하세요!');
+    continue;
+  }
+
+  // 비밀번호 일치검사
+  let inputPassword = prompt('비밀번호를 입력하세요!');
+  if (inputPassword === currentUser.password) {
+    // 이름을 출력해서 로그인 성공 메시지
+    alert(`${currentUser.username}님 로그인 성공!`);
+    break;
+  } else {
+    alert('비밀번호가 틀렸습니다!');
+  }
+}
+
