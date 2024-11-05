@@ -39,3 +39,31 @@ arr[5]();
 
 const pooh = arr[5];
 pooh();
+
+console.log('=============');
+
+const cat = {
+  name: '야옹이',
+  age: 5,
+  // 메서드: 객체의 기능을 표현
+  sleep: function () {
+    console.log('쿨쿨쿨zzz');
+  }
+};
+
+const foodList = {
+  0: '짜장면',
+  1: '볶음밥',
+  2: '탕수육',
+  length: 3,
+  indexOf: function (item) { },
+  push: function(...items) {}
+};
+
+console.log(foodList.length);
+console.log(cat['name']);
+console.log(foodList[0]);
+
+
+
+
