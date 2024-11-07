@@ -370,8 +370,9 @@ console.log(`중간 거래액: ${middleTradeValue}`);
 //   결과는 `{도시이름: 거래수}` 형태의 객체여야 합니다.**
 console.log('==================');
 
-const trsCountByCity = traders.reduce((cityObj, trs) => {
-  const city = trs.trader.city;
+const trsCountByCity = traders.reduce((cityObj, {trader}) => {
+  // const city = trs.trader.city;
+  const { city } = trader;
   if (cityObj[city] === undefined) {
     cityObj[city] = 1;
   } else {

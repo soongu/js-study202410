@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <ul>
+    <li class="fruit apple">사과</li>
+    <li class="fruit banana">바나나</li>
+    <li id="gp" class="fruit grape">포도</li>
+    <li class="fruit peach">복숭아</li>
+  </ul>
+
+  <script>
+    // 포도 li태그를 가져오고 싶음
+    // const $grape = document.querySelector('.grape');
+    // const $grape = document.querySelector('ul li:nth-child(3)');
+    // const $grape = document.querySelector('.banana + li');
+    // const $grape = document.getElementById('gp');
+    const $grape = document.querySelector('#gp');
+    $grape.style.color = 'violet';
+
+    // querySelector는 해당 선택자에 일치하는 가장 처음 발견된
+    // 요소 하나를 가져옴
+
+    // 유사 배열 : 구조는 배열과 유사하나 실제로는 객체에 가까움
+    // 이 유사 배열에 유용한 배열 메서드를 사용하려면
+    // 유사 배열을 실제 배열로 변환해서 사용해야 함
+    const arraylike = document.querySelectorAll('.fruit');
+    const realArray = [...arraylike];
+    
+    realArray.forEach(li => {
+      li.style.fontStyle = 'italic';
+      li.style.border = '1px dashed orange';
+    });
+    
+    
+
+  </script>
+</body>
+</html>

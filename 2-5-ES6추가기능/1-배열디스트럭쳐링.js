@@ -1,5 +1,5 @@
 
-// 디스트럭쳐링 (distructuring) : 구조 분해 할당
+// 디스트럭쳐링 (destructuring) : 구조 분해 할당
 
 const userNames = ['김철수', '홍길동', '고구마'];
 
@@ -44,4 +44,27 @@ const [one, three, ...numsCopy] = nums;
 console.log(`one: ${one}`);
 console.log(`three: ${three}`);
 console.log(`others: `, numsCopy);
+
+// 스프레드를 통한 배열 합치기
+console.log('==================');
+
+const foods = ['햄버거', '콜라', '감자튀김'];
+const fruits = ['오렌지', '자몽', '레몬'];
+
+const newFoods = [...foods, ...fruits];
+console.log(newFoods);
+console.log(newFoods.length);
+
+console.log(foods);
+// 배열 복사
+const newFruits = [...fruits];
+newFruits[1] = '포도';
+console.log(newFruits);
+console.log(fruits);
+
+const myFavoriteFoods = ['족발', ...foods, '닭강정', '피자'];
+console.log(myFavoriteFoods);
+
+
+
 
