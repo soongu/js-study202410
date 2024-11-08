@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="wrap">
+      <ul id="fruits">
+        <li class="fr apple">사과</li>
+        <li class="fr banana">바나나</li>
+        <li class="fr grape">포도</li>
+      </ul>
+    </div>
+
+    <div id="wrapper">
+      <section class="contents">
+        <ul class="list">
+          <li class="item">
+            <a
+              href="#"
+              class="link"
+              >10</a
+            >
+          </li>
+          <li class="item">
+            <a
+              href="#"
+              class="link active"
+              >20</a
+            >
+          </li>
+          <li class="item">
+            <a
+              href="#"
+              class="link"
+              >30</a
+            >
+          </li>
+        </ul>
+        <ul class="list">
+          <li class="item">
+            <a
+              href="#"
+              class="link"
+              >40</a
+            >
+          </li>
+          <li class="item">
+            <a
+              href="#"
+              class="link"
+              >50</a
+            >
+          </li>
+          <li class="item">
+            <a
+              href="#"
+              class="link"
+              >60</a
+            >
+          </li>
+        </ul>
+      </section>
+    </div>
+
+    <script>
+      const $ul = document.getElementById('fruits');
+
+      const $wrap = $ul.parentElement;
+      $wrap.style.background = 'orange';
+
+      $ul.parentElement.parentElement.style.background = 'greenyellow';
+
+      const [$apple, $banana, $grape] = [...$ul.children];
+
+      console.log($banana.nextElementSibling === $grape);
+      console.log($ul.children[0] === $apple);
+      console.log($ul.lastElementChild.previousElementSibling === $apple);
+
+      console.log('===========');
+
+      // active 부터 60까지 탐색
+      const $active = document.querySelector('.active');
+      // const $target = $active
+      //   .parentElement
+      //   .parentElement
+      //   .nextElementSibling
+      //   .lastElementChild
+      //   .firstElementChild;
+
+      // 한방에 윗쪽 방향(자식 -> 부모)으로 탐색하는 함수
+      // closest(css selector)
+      const $target = $active.closest('.contents');
+
+      // 한방에 아래 방향(부모 -> 자식)으로 탐색하는 함수
+      const $tg = $active
+        .closest('.contents')
+        .querySelector('ul:last-child li:last-child');
+
+      console.log($tg.textContent);
+    </script>
+  </body>
+</html>
