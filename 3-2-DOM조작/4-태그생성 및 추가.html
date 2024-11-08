@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+  <ul id="hobbies">
+    <li>수영</li>
+  </ul>
+
+  <script>
+
+    // 원하는 태그를 생성해서 원하는 부모의 자식으로 추가하기
+    // options = { text: '합기도', className: 'box', id: 'every' };
+    function appendNewTag($parentNode, tagName='div', options={}) {
+      const $newTag = document.createElement(tagName);
+      if (options.text) $newTag.textContent = options.text;
+      $parentNode.append($newTag);
+    }
+
+    const $hobbies = document.getElementById('hobbies');
+
+    // 태그를 생성 : <li></li>
+    const $newLi = document.createElement('li');
+
+    // 텍스트 추가 : <li>바나나</li>
+    $newLi.textContent = '헬스';
+    console.log($newLi);
+
+    // append, prepend는 주체가 부모
+    // ul의 맨 끝에 추가
+    $hobbies.append($newLi);
+
+    const $newLi2 = document.createElement('li');
+    $newLi2.textContent = '요가';
+
+    // ul의 맨 앞에 추가
+    $hobbies.prepend($newLi2);
+    
+    // before, after는 자식이 주체
+    const $newLi3 = document.createElement('li');
+    $newLi3.textContent = '태권도';
+
+    $newLi2.after($newLi3);
+
+    const hobbyList = ['합기도', '당구', '게임'];
+
+    hobbyList.forEach(
+      hobby => appendNewTag($hobbies, 'li', {text: hobby})
+    );
+
+
+  </script>
+
+</body>
+</html>

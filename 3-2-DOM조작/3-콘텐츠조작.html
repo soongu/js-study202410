@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .highlight {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div id="greet">
+    Hello <span class="highlight">World!</span>
+  </div>
+
+  <ul id="foods">
+    <li class="food">떡볶이</li>
+    <li class="food">고구마</li>
+    <li class="food">햄버거</li>
+  </ul>
+
+  <script>
+    const $greet = document.getElementById('greet');
+    console.log($greet.textContent.trim());
+
+    // $greet.textContent = '<span class="highlight">안녕</span>하세요';
+    $greet.innerHTML = '<span class="highlight">안녕</span>하세요';
+
+    const $foods = document.getElementById('foods');
+    $foods.children[1].textContent = '감자';
+
+    // 태그를 자식의 맨 끝에 추가
+    $foods.innerHTML += `<li class="food">콜라</li>`;
+
+    // 자식 태그 전부 삭제
+    $foods.innerHTML = '';
+
+  </script>
+
+</body>
+</html>
