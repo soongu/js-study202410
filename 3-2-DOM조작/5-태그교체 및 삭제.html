@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+  <ul id="fruits">
+    <li>사과</li>
+    <li>바나나</li>
+    <li>포도</li>
+  </ul>
+
+  <script>
+    const $fruits = document.getElementById('fruits');
+    const [$apple, $banana, $grape] = [...$fruits.children];
+
+    // 첫번째 li를 input태그로 교체
+    const $newInput = document.createElement('input');
+    $newInput.value = $apple.textContent;
+
+    // $parent.replaceChild(new, old) 
+    $fruits.replaceChild($newInput, $apple);
+
+    // 노드 삭제
+    // $parent.removeChild($target)
+    // $target.remove()
+
+    // $fruits.removeChild($banana);
+    // $grape.remove();
+
+    // 전체 삭제
+    // $fruits.innerHTML = '';
+    [...$fruits.children].forEach($f => $f.remove());
+
+  </script>
+
+</body>
+</html>

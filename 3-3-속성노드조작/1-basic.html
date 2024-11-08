@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+  <input type="email" id="account" value="abc@def.com">
+
+  <script>
+    // 속성 노드 생성
+    const typeNode = {
+      name: 'type',
+      value: 'email'
+    };
+    const idNode = {
+      name: 'id',
+      value: 'account'
+    };
+    // 요소 노드(태그 객체) 생성
+    const inputNode = {
+      tagName: 'INPUT',
+      children: [],
+      attributes: {type: typeNode, id: idNode, 0: typeNode, 1: idNode}
+    };
+
+    // input 가져오기
+    const $input = document.getElementById('account');
+    console.log($input.attributes.value.value);
+
+    $input.attributes.id.value = 'acc';
+    $input.attributes.value.value = 'ggg@gmail.com';
+    
+
+  </script>
+</body>
+</html>
