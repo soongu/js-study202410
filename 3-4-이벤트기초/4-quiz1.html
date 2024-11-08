@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마우스를 올릴 때 텍스트 색상 변경</title>
+  <style>
+    #text {
+      font-size: 24px;
+      transition: color 0.3s;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="text">이 텍스트에 마우스를 올려보세요!</div>
+
+  <script>
+    const $text = document.getElementById('text');
+
+    $text.addEventListener('mouseover', () => {
+      $text.style.color = 'blue';
+    });
+    $text.addEventListener('mouseout', () => {
+      $text.style.color = 'black';
+    });
+  </script>
+  
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>실시간 텍스트 변경</title>
+  </head>
+  <body>
+    <input
+      type="text"
+      id="textInput"
+      placeholder="이곳에 입력하면 텍스트가 변경됩니다" 
+    />
+
+
+    <div id="output">여기에 입력 내용이 표시됩니다.</div>
+
+    <script>
+      const textInput = document.getElementById('textInput');
+      const output = document.getElementById('output');
+
+      /*
+        getAttribute('value') => 실시간 변동을 감지하지 못함. 초기값을 가져옴
+        .value => 실시간 변동을 감지
+      */
+      textInput.addEventListener('input', function () {
+        // console.log(textInput.value);
+        output.textContent = textInput.value;
+      });
+    </script>
+  </body>
+</html>
