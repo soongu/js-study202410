@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <p>아무 곳이나 클릭하세요</p>
+  <em class="msg"></em>
+
+  <hr>
+
+  <input type="text" id="txt">
+  <p class="show"></p>
+
+  <script>
+    document.addEventListener('click', function(e) {
+      // console.log(e);
+      const $msg = document.querySelector('.msg');
+
+      if (e.shiftKey) {
+        $msg.textContent = `x: ${e.x}, y: ${e.y}`;
+      } else {
+        $msg.textContent = '';
+      }
+    });
+
+    const $txtInput = document.getElementById('txt');
+
+    $txtInput.addEventListener('keyup', (e) => {
+      console.log(e);
+      e.stopPropagation();
+      
+      const $show = document.querySelector('.show');
+
+      if (e.key === 'Enter') {
+        $show.textContent = $txtInput.value;
+        $txtInput.value = '';
+      }
+    });
+
+  </script>
+</body>
+</html>

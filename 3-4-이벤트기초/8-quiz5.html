@@ -11,5 +11,25 @@
   <div id="content">여기 있는 텍스트의 크기를 조정해보세요!</div>
   <div id="warning" style="color: red; display: none;">유효하지 않은 입력입니다! 숫자를 입력해주세요.</div>
   
+  <script>
+    const $fontSizeInput = document.getElementById('fontSizeInput');
+    const $content = document.getElementById('content');
+    const $warning = document.getElementById('warning');
+
+    $fontSizeInput.addEventListener('input', () => {
+      const fontSize = $fontSizeInput.value;
+
+      // 입력된 값이 숫자인지 확인
+      // NaN비교는 ===으로 불가능, isNaN함수로 비교
+      if (isNaN(+fontSize) || fontSize === '') {
+        console.log('숫자가 아님!');
+        $warning.style.display = 'block';
+      } else {
+        console.log('숫자가 맞음!');
+        $warning.style.display = 'none';
+      }
+      $content.style.fontSize = `${fontSize}px`;
+    });
+  </script>
 </body>
 </html>

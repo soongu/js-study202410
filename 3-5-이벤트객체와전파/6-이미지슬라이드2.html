@@ -9,6 +9,7 @@
   <style>
     body {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
@@ -23,6 +24,7 @@
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       border-radius: 10px;
       overflow: hidden;
+      margin-bottom: 30px;
     }
 
     #slider img {
@@ -49,6 +51,24 @@
     button:focus {
       outline: none;
     }
+    #thumbnails {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .thumbnail {
+      width: 100px;
+      height: 75px;
+      object-fit: cover;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+      border-radius: 5px;
+    }
+
+    .thumbnail:hover {
+      opacity: 0.7;
+    }
   </style>
 </head>
 
@@ -60,13 +80,37 @@
     <button id="next">다음</button>
   </div>
 
+  <!-- 모든 이미지의 썸네일을 슬라이더 하단에 배치 -->
+  <div id="thumbnails" data-food="짜장면" data-hobby="축구">
+    <!-- 스크립트로 배치 -->
+    <!-- <img class="thumbnail" src="https://blog.kakaocdn.net/dn/dN4uhe/btr8xWDwbrK/5YjBrelhtJwU2BAcLtEVoK/img.jpg" alt="">
+    <img class="thumbnail" src="https://www.sisajournal.com/news/photo/202108/222572_131065_5150.jpg" alt="">
+    <img class="thumbnail" src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D" alt=""> -->
+  </div>
+
   <script>
     // 이미지 경로를 저장할 배열
     const images = [
       'https://blog.kakaocdn.net/dn/dN4uhe/btr8xWDwbrK/5YjBrelhtJwU2BAcLtEVoK/img.jpg',
       "https://www.sisajournal.com/news/photo/202108/222572_131065_5150.jpg",
-      'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D'
+      'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D',
+      'https://img.wowtv.co.kr/wowtv_news/dnrs/20200922/B20200922173834073.jpg',
     ];
+
+    // 배열에 저장된 이미지경로 개수만큼 img태그를 생성해서
+    // 화면(#thumbnails)에 렌더링
+    const $thumbnails = document.getElementById('thumbnails');
+
+    images.forEach((imgSrc, i) => {
+      const $newImg = document.createElement('img');
+      $newImg.setAttribute('src', imgSrc);
+      $newImg.setAttribute('alt', `image${i+1}`)
+      $newImg.classList.add('thumbnail');
+      // 인덱스를 태그에 저장해두기
+      $newImg.dataset.index = i;
+
+      $thumbnails.append($newImg);
+    });
 
     const [$prev, $image, $next] 
       = [...document.getElementById('slider').children];
@@ -111,6 +155,14 @@
 
       $image.setAttribute('src', images[currentIndex]);
     });
+
+    // 썸네일 클릭 이벤트
+    $thumbnails.addEventListener('click', e => {
+      // console.log(e.target.src);
+      $image.src = e.target.src;
+      // currentIndex 재조정
+      currentIndex = +e.target.dataset.index;
+    }); 
 
   </script>
 </body>

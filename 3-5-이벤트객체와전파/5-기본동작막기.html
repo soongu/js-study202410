@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+  <a href="https://github.com" class="link">깃허브로 이동</a>
+
+  <script>
+    const $link = document.querySelector('.link');
+
+    $link.addEventListener('click', e => {
+      // 태그에 자동으로 걸려있는 스크립트 중단하기
+      const flag = confirm('정말로 이동합니까?');
+      if (!flag) e.preventDefault();
+    });
+  </script>
+</body>
+</html>
