@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>자동 알림 메시지 닫기</title>
+  <style>
+    /* 알림 메시지 스타일 */
+    .alert {
+      display: none; /* 기본적으로 숨김 */
+      padding: 15px;
+      background-color: #4CAF50; /* 초록색 배경 */
+      color: white;
+      font-weight: bold;
+      border-radius: 5px;
+      width: 300px;
+      text-align: center;
+      margin: 20px auto;
+      position: relative;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .alert.show {
+      display: block;
+    }
+
+    /* 닫기 버튼 스타일 */
+    .close-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 알림 메시지 -->
+  <div class="alert" id="alertBox">
+    <button class="close-btn" id="closeBtn">×</button>
+    성공적으로 작업이 완료되었습니다!
+  </div>
+
+  <!-- 알림 버튼 -->
+  <button id="showAlertBtn">알림 메시지 표시</button>
+
+  <script>
+    let alertTimeout;
+
+    // 알림 메시지 표시 함수
+    function showAlert() {
+      const alertBox = document.getElementById('alertBox');
+      alertBox.classList.add('show'); // 알림 표시
+
+      // 3초 후에 알림 자동 닫기
+      alertTimeout = setTimeout(closeAlert, 3000);
+    }
+
+    // 알림 메시지 닫기 함수
+    function closeAlert() {
+      const alertBox = document.getElementById('alertBox');
+      alertBox.classList.remove('show'); // 알림 숨기기
+
+      // 이미 설정된 타이머를 취소하여 중복 실행 방지
+      clearTimeout(alertTimeout);
+    }
+
+    // 이벤트 리스너 설정
+    document.getElementById('showAlertBtn').addEventListener('click', showAlert);
+    document.getElementById('closeBtn').addEventListener('click', closeAlert);
+  </script>
+
+</body>
+</html>

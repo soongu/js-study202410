@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+  <button id="start">시작</button>
+  <button id="stop">정지</button>
+  <p>시간: <span id="timer">0</span>초</p>
+
+  <script>
+    const $startBtn = document.getElementById('start');
+    const $stopBtn = document.getElementById('stop');
+
+    let intervalId = null;
+    let startTime = 0;
+
+    $startBtn.addEventListener('click', e => {
+
+      // 이미 인터벌이 진행중이면 더이상 인터벌을 생성하지 않도록
+      if (intervalId) {
+        return;
+      }
+
+      // 시작버튼을 누른 이후로 경과시간을 계산해서
+      // span태그에 넣어줘야 함.
+      // 시작 시간 기록
+      startTime = new Date();
+      // console.log(`시작시간: ${now}`);
+
+      intervalId = setInterval(() => {
+        const now = new Date();
+        // 경과 시간
+        const elapsedTime = now - startTime; // 시간을 빼면 밀리초로 계산
+        const $timerSpan = document.getElementById('timer');
+        $timerSpan.textContent = elapsedTime / 1000; // 초로 변환해서 렌더링
+      }, 1);
+      
+    });
+
+
+    $stopBtn.addEventListener('click', e => {
+      // 인터벌을 취소
+      clearInterval(intervalId); // 인터벌 취소
+      intervalId = null; // id 초기화
+
+      const endTime = new Date();
+      console.log(`경과시간: ${(endTime - startTime) / 1000}초`);
+      
+    });
+
+  </script>
+
+</body>
+</html>
