@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>수직 탭 인터페이스</title>
+  <style>
+    /* 전체 레이아웃 설정 */
+    .tab-container {
+      display: flex;
+      width: 600px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background-color: #f8f9fa;
+    }
+
+    /* 왼쪽 탭 메뉴 스타일 */
+    .tab-menu {
+      display: flex;
+      flex-direction: column;
+      width: 150px;
+      background-color: #e9eef5;
+      border-right: 1px solid #ddd;
+    }
+
+    /* 탭 버튼 스타일 */
+    .tab-button {
+      padding: 15px;
+      cursor: pointer;
+      border: none;
+      background-color: #e9eef5;
+      color: #555;
+      text-align: left;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    /* 활성화된 탭 버튼 스타일 */
+    .tab-button.active {
+      background-color: #4a90e2;
+      color: white;
+    }
+
+    /* 오른쪽 탭 콘텐츠 영역 스타일 */
+    .tab-content-container {
+      padding: 20px;
+      flex-grow: 1;
+      background-color: white;
+    }
+
+    /* 탭 콘텐츠 스타일 */
+    .tab-content {
+      display: none;
+      font-size: 16px;
+      color: #333;
+    }
+
+    /* 활성화된 탭 콘텐츠 스타일 */
+    .tab-content.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 탭 컨테이너 -->
+  <div class="tab-container">
+    
+    <!-- 수직 탭 메뉴 -->
+    <div class="tab-menu">
+      <button class="tab-button active" data-tab="tab1">탭 1</button>
+      <button class="tab-button" data-tab="tab2">탭 2</button>
+      <button class="tab-button" data-tab="tab3">탭 3</button>
+    </div>
+
+    <!-- 탭 콘텐츠 영역 -->
+    <div class="tab-content-container">
+      <div class="tab-content active" id="tab1">
+        <h3>탭 1의 콘텐츠</h3>
+        <p>이곳은 첫 번째 탭의 내용입니다.</p>
+      </div>
+      <div class="tab-content" id="tab2">
+        <h3>탭 2의 콘텐츠</h3>
+        <p>이곳은 두 번째 탭의 내용입니다.</p>
+      </div>
+      <div class="tab-content" id="tab3">
+        <h3>탭 3의 콘텐츠</h3>
+        <p>이곳은 세 번째 탭의 내용입니다.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // 모든 탭 버튼과 콘텐츠 요소 가져오기
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    // 각 탭 버튼에 클릭 이벤트 추가
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // 모든 탭 버튼과 콘텐츠에서 active 클래스 제거
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+
+        // 클릭된 탭 버튼과 해당하는 콘텐츠에 active 클래스 추가
+        button.classList.add('active');
+        // 버튼과 연결된 컨텐츠 박스를 가져와서 활성화
+        const contentBox = document.getElementById(`${button.dataset.tab}`);
+        contentBox.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>

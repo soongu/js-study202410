@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /* 메인 컨테이너 스타일 */
+      .main {
+        padding: 20px;
+      }
+
+      /* 슬라이드 메뉴 스타일 */
+      .slide-menu {
+        position: fixed;
+        top: 0;
+        left: -100%; /* 처음에 화면 바깥에 숨겨둠 */
+        width: 300px;
+        height: 100vh;
+        background-color: #333;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+        transition: left 0.3s ease;
+        z-index: 1000;
+      }
+
+      /* 메뉴 링크 스타일 */
+      .slide-menu a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 0;
+        font-size: 18px;
+      }
+
+      .slide-menu a:hover {
+        background-color: #444;
+      }
+
+      /* 닫기 버튼 스타일 */
+      .close-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        align-self: flex-end;
+      }
+
+      /* 슬라이드 메뉴가 보이는 상태 */
+      .slide-menu.show {
+        left: 0; /* 화면 왼쪽에서 메뉴가 슬라이드되어 나타남 */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <button id="menuButton">슬라이드 메뉴 열기</button>
+      <div
+        class="slide-menu"
+        id="slideMenu">
+        <button
+          id="closeButton"
+          class="close-btn">
+          X
+        </button>
+        <a href="#">메뉴 1</a>
+        <a href="#">메뉴 2</a>
+        <a href="#">메뉴 3</a>
+      </div>
+    </div>
+
+    <script>
+      const menuButton = document.getElementById('menuButton');
+      const slideMenu = document.getElementById('slideMenu');
+      const closeButton = document.getElementById('closeButton');
+
+      // 메뉴 버튼 클릭 시 슬라이드 메뉴 열기
+      menuButton.addEventListener('click', function() {
+        slideMenu.classList.add('show');
+      });
+
+      // 닫기 버튼 클릭 시 슬라이드 메뉴 닫기
+      closeButton.addEventListener('click', function() {
+        slideMenu.classList.remove('show');
+      });
+
+    </script>
+  </body>
+</html>

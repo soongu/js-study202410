@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>모달 창 예제</title>
+  <style>
+    /* 모달 배경 레이어 스타일 */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* 모달 콘텐츠 스타일 */
+    .modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 300px;
+    }
+
+    /* 모달 열기 버튼 스타일 */
+    #openModal {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .close-btn {
+      margin-top: 20px;
+      padding: 8px 16px;
+      font-size: 14px;
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 모달 열기 버튼 -->
+  <button id="openModal">모달 열기</button>
+
+  <!-- 모달 창 구조 -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <h2>모달 제목</h2>
+      <p>이곳은 모달 내용입니다.</p>
+      <button class="close-btn">닫기</button>
+    </div>
+  </div>
+
+  <script>
+    const openModalBtn = document.getElementById('openModal');
+    const closeModalBtn = document.querySelector('.close-btn');
+    const modalOverlay = document.getElementById('modalOverlay');
+
+    // 모달 열기 기능
+    openModalBtn.addEventListener('click', () => {
+      modalOverlay.style.display = 'flex';
+    });
+
+    // 모달 닫기 버튼 클릭 시 모달 닫기
+    closeModalBtn.addEventListener('click', () => {
+      modalOverlay.style.display = 'none';
+    });
+
+    // ESC 키로 모달 닫기
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        modalOverlay.style.display = 'none';
+      }
+    });
+
+    // 모달 외부 클릭 시 모달 닫기
+    modalOverlay.addEventListener('click', (event) => {
+      
+      if (event.target === modalOverlay) {
+        modalOverlay.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>

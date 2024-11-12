@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /* 드롭다운 스타일 */
+      .dropdown {
+        position: relative;
+      }
+
+      .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: white;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        padding: 12px;
+        min-width: 160px;
+        z-index: 1;
+      }
+
+      .dropdown-menu a {
+        color: black;
+        padding: 8px 12px;
+        text-decoration: none;
+        display: block;
+      }
+
+      .dropdown-menu a:hover {
+        background-color: #f1f1f1;
+      }
+
+      .show {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dropdown">
+      <button
+        class="dropdown-toggle"
+        id="dropdownButton">
+        메뉴
+      </button>
+      <div
+        class="dropdown-menu"
+        id="dropdownMenu">
+        <a href="#">옵션 1</a>
+        <a href="#">옵션 2</a>
+        <a href="#">옵션 3</a>
+      </div>
+    </div>
+
+    <script>
+      const dropdownButton = document.getElementById('dropdownButton');
+      const dropdownMenu = document.getElementById('dropdownMenu');
+
+      dropdownButton.addEventListener('click', function() {
+        dropdownMenu.classList.toggle('show'); // 클릭 시 드롭다운 메뉴 열기/닫기
+      });
+
+      // 외부 영역 클릭시 드롭다운 닫기
+      document.addEventListener('click', function(event) {
+        
+        console.log(event.target);
+        
+        // contains() : 해당 DOM이 포함되어 있는지 여부
+        const isClickInside 
+          = dropdownButton.contains(event.target) 
+            || dropdownMenu.contains(event.target);
+
+        if (!isClickInside) {
+          dropdownMenu.classList.remove('show'); // 외부 클릭 시 드롭다운 닫기
+        }
+      });
+
+    </script>
+  </body>
+</html>

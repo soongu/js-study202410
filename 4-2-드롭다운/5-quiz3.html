@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /* 드롭다운 기본 스타일 */
+      .dropdown {
+        position: relative;
+      }
+
+      .dropdown-menu,
+      .submenu-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: white;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        padding: 12px;
+        min-width: 160px;
+        z-index: 1;
+      }
+
+      .dropdown-menu a,
+      .submenu a {
+        color: black;
+        padding: 8px 12px;
+        text-decoration: none;
+        display: block;
+      }
+
+      .dropdown-menu a:hover,
+      .submenu a:hover {
+        background-color: #ddd;
+      }
+
+      .show {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dropdown">
+      <button
+        class="dropdown-toggle"
+        id="dropdownButton">
+        다단계 메뉴
+      </button>
+      <div
+        class="dropdown-menu"
+        id="dropdownMenu">
+        <a href="#">옵션 1</a>
+        <a href="#">옵션 2</a>
+        <div class="submenu">
+          <a href="#">옵션 3</a>
+          <div
+            class="submenu-menu"
+            id="submenuMenu">
+            <a href="#">서브옵션 1</a>
+            <a href="#">서브옵션 2</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const dropdownButton = document.getElementById('dropdownButton');
+      const dropdownMenu = document.getElementById('dropdownMenu');
+      const submenu = document.querySelector('.submenu');
+      const submenuMenu = document.getElementById('submenuMenu');
+
+      // 드롭다운 버튼 클릭 시 메인 메뉴 표시
+      dropdownButton.addEventListener('click', function() {
+        dropdownMenu.classList.toggle('show');
+      });
+
+      /*
+        mouseover + mouseout    : 버블링 x
+        mouseenter + mouseleave : 버블링 o
+      */
+      // 서브 메뉴에 마우스를 올리면 서브 드롭다운 메뉴 열기
+      submenu.addEventListener('mouseenter', function() {
+        submenuMenu.classList.add('show');
+      });
+
+      // 전체 드롭다운 메뉴에서 마우스를 벗어나면 서브 드롭다운 메뉴 닫기
+      dropdownMenu.addEventListener('mouseleave', function() {
+        submenuMenu.classList.remove('show');
+      });
+    </script>
+  </body>
+</html>

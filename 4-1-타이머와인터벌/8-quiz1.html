@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>지연된 인사 메시지</title>
+</head>
+<body>
+  <button id="greetButton">인사하기</button>
+
+  <script>
+    const greetButton = document.getElementById('greetButton');
+
+    greetButton.addEventListener('click', () => {
+      setTimeout(() => {
+        console.log("안녕하세요! 방문해 주셔서 감사합니다!");
+      }, 5000);
+    });
+  </script>
+</body>
+</html>

@@ -3,9 +3,151 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>스탑워치</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    .stopwatch {
+      font-size: 2rem;
+      margin: 20px;
+    }
+    .buttons, .log-container {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .log-container {
+      flex-direction: column;
+      align-items: center;
+    }
+    .log-entry {
+      font-size: 1rem;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
-  
+
+  <h1>스탑워치</h1>
+  <div class="stopwatch" id="display">00:00:00</div>
+  <div class="buttons">
+    <button id="start">시작</button>
+    <button id="pause" disabled>일시정지</button>
+    <button id="reset">초기화</button>
+  </div>
+  <div class="log-container" id="logContainer">
+    <h2>일시정지 로그</h2>
+  </div>
+
+  <script>
+    // 지금 스톱워치가 실행 중인지에 대한 여부
+    let isRunning = false;
+    // 스톱워치 인터벌의 아이디를 저장할 변수
+    let timerInterval;
+    // 누적 시간을 측정할 변수 - 경과시간
+    let elapsedTime = 0; // 단위 : 밀리초
+
+    // 시간이 렌더링될 태그를 가져옴
+    const $display = document.getElementById('display');
+
+    // 버튼들을 가져옴
+    const [$startBtn, $pauseBtn, $resetBtn] 
+      = [...document.querySelector('.buttons').children];
+
+    // 로그컨테이너를 가쟈옴
+    const $logContainer = document.getElementById('logContainer');
+
+    // 경과 시간을 포맷팅 (분:초:밀리초)하는 함수
+    function formatElapsedTime() {
+      // 경과시간을 00분 00초 00밀리초 형태로 변환
+      const minutes = String(Math.floor(elapsedTime / 60000)).padStart(2, "0");
+      const seconds = String(Math.floor((elapsedTime % 60000) / 1000)).padStart(2, "0");
+      const millisecond = String(Math.floor((elapsedTime % 1000) / 10)).padStart(2, '0');
+      
+      // 지속적인 경과시간을 화면에 렌더링
+      $display.textContent = `${minutes}:${seconds}:${millisecond}`;
+    }
+
+    // 시작상태, 버튼 활성화 상태를 처리하는 함수
+    // @param - isStart : true이면 시작상태, false면 리셋상태
+    function changeStartState(isStart) {
+      isRunning = isStart;
+      $startBtn.disabled = isStart;
+      $pauseBtn.disabled = !isStart;
+    }
+
+    // 시작 기능 이벤트 핸들러 정의
+    const startStopwatch = (e) => {
+      
+      changeStartState(true);
+      
+      // 인터벌이 시작될 때 아이디를 timerInterval에 저장
+      timerInterval = setInterval(() => {
+        elapsedTime += 10; // 10밀리초씩 경과시간을 갱신
+        // 시간 포맷팅
+        formatElapsedTime();
+      }, 10); // 실제 시간이 10밀리초씩 반복 증가
+    };
+
+    // 일시정지 시간 로그 찍기
+    function logStopwatchTime() {
+      
+      // 현재 멈춘 시간을 읽어서 로그컨테이너에 추가
+      const stopTime = $display.textContent;
+      const $newDiv = document.createElement('div');
+      $newDiv.textContent = stopTime;
+
+      $logContainer.append($newDiv);
+    }
+
+    // 일시정지를 수행하는 이벤트 핸들러
+    function pauseStopwatch(e) {
+      if (isRunning) { // 현재 스톱워치가 실행중인 경우
+        // 일시정지를 시켜줘야 함
+        // 스톱워치를 중단 -> 인터벌을 해제
+        clearInterval(timerInterval);
+        isRunning = false; // 실행 상태 변경
+        // 버튼 텍스트 변경
+        $pauseBtn.textContent = '재개';
+
+        // 일시정지 시간로그 찍기
+        logStopwatchTime();
+
+      } else { // 스톱워치가 중단되어 있는 경우
+        // 재개를 시켜줘야 함 : 다시 인터벌을 가동
+        startStopwatch();
+        // 버튼 텍스트 변경
+        $pauseBtn.textContent = '일시정지';
+      }
+    };
+
+    // 초기 상태로 되돌리는 이벤트 핸들러
+    function resetStopwatch(e) {
+      $display.textContent = '00:00:00';
+      elapsedTime = 0;
+      clearInterval(timerInterval);
+      changeStartState(false);
+      $pauseBtn.textContent = '일시정지';
+      $logContainer.innerHTML = '<h2>일시정지 로그</h2>'; // 로그 초기화
+    }
+    
+    // 시작버튼에 이벤트 리스너 등록
+    $startBtn.addEventListener('click', startStopwatch);
+    // 일시정지 버튼에 이벤트 리스너 등록
+    $pauseBtn.addEventListener('click', pauseStopwatch);
+    // 초기화 버튼에 이벤트 리스너 등록
+    $resetBtn.addEventListener('click', resetStopwatch);
+
+    </script>
 </body>
 </html>

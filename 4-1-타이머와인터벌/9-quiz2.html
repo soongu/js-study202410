@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>배경 색상 변경</title>
+</head>
+<body>
+  <script>
+    const colors = ["lightblue", "lightgreen", "lightcoral"];
+    let colorIndex = 0;
+
+    const colorInterval = setInterval(() => {
+      document.body.style.backgroundColor = colors[colorIndex];
+      colorIndex = (colorIndex + 1) % colors.length;
+    }, 3000);
+
+    // 15초 후에 배경 색상 변경 멈추기
+    setTimeout(() => {
+      clearInterval(colorInterval);
+    }, 15000);
+  </script>
+</body>
+</html>

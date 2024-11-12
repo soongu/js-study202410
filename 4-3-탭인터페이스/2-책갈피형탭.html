@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>책갈피형 탭 인터페이스</title>
+  <style>
+    /* 전체 컨테이너 */
+    .tab-container {
+      width: 400px;
+      margin: 50px auto;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: #ffffff;
+    }
+
+    /* 탭 메뉴 스타일 */
+    .tab-menu {
+      display: flex;
+      background-color: #7986cb;
+    }
+
+    /* 기본 탭 버튼 스타일 */
+    .tab-button {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      color: #e0e0e0;
+      font-weight: bold;
+      cursor: pointer;
+      background-color: transparent;
+      border: none;
+      transition: background-color 0.3s, color 0.3s;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+
+    /* 활성화된 탭 버튼 스타일 */
+    .tab-button.active {
+      background-color: #ffffff;
+      color: #333;
+      border: 1px solid #7986cb;
+      border-bottom: none; /* 콘텐츠와 자연스럽게 연결되도록 하단 테두리 제거 */
+      position: relative;
+      top: 1px;
+      z-index: 1;
+    }
+
+    /* 탭 콘텐츠 영역 */
+    .tab-content-container {
+      padding: 20px;
+      background-color: #ffffff;
+      border: 1px solid #7986cb;
+      border-top: none;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+
+    /* 탭 콘텐츠 숨김 기본 설정 */
+    .tab-content {
+      display: none;
+      font-size: 16px;
+      color: #555;
+    }
+
+    /* 활성화된 탭 콘텐츠 */
+    .tab-content.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 탭 컨테이너 -->
+  <div class="tab-container">
+    
+    <!-- 탭 메뉴 -->
+    <div class="tab-menu">
+      <button class="tab-button active" data-tab="1">Active</button>
+      <button class="tab-button" data-tab="2">Inactive</button>
+      <button class="tab-button" data-tab="3">Other</button>
+    </div>
+
+    <!-- 탭 콘텐츠 영역 -->
+    <div class="tab-content-container">
+      <div class="tab-content active" id="tab1">
+        <p>Active 탭의 콘텐츠입니다. 주요 정보를 여기에 표시합니다.</p>
+      </div>
+      <div class="tab-content" id="tab2">
+        <p>Inactive 탭의 콘텐츠입니다. 추가 정보를 표시할 수 있습니다.</p>
+      </div>
+      <div class="tab-content" id="tab3">
+        <p>Other 탭의 콘텐츠입니다. 옵션 및 기타 정보를 제공합니다.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // 탭 버튼과 콘텐츠 요소 가져오기
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    // 탭 클릭 이벤트 설정
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // 모든 탭 버튼과 콘텐츠에서 active 클래스 제거
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+
+        // 클릭한 탭 버튼과 해당하는 콘텐츠에 active 클래스 추가
+        button.classList.add('active');
+        document.getElementById(`tab${button.dataset.tab}`).classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>

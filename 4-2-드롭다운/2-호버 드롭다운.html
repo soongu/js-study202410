@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    /* 드롭다운 스타일 */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: white;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      padding: 12px;
+      min-width: 160px;
+      z-index: 1;
+    }
+
+    .dropdown-menu a {
+      color: black;
+      padding: 8px 12px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-menu a:hover {
+      background-color: #f1f1f1;
+    }
+
+    /* 드롭다운 버튼에 호버할 때만 드롭다운 메뉴 표시 */
+    .dropdown:hover > .dropdown-toggle + .dropdown-menu {
+      display: block;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="dropdown">
+    <button class="dropdown-toggle">메뉴</button>
+    <div class="dropdown-menu">
+      <a href="#">옵션 1</a>
+      <a href="#">옵션 2</a>
+      <a href="#">옵션 3</a>
+    </div>
+  </div>
+
+</body>
+</html>
