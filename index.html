@@ -1,153 +1,110 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <meta charset="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>스탑워치</title>
+  <title>드래그 앤 드롭 예제</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .container {
+      width: 300px;
+      margin: 0 auto;
       padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
     }
-    .stopwatch {
-      font-size: 2rem;
-      margin: 20px;
+    .draggable-item {
+      padding: 10px;
+      margin: 5px 0;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: grab;
     }
-    .buttons, .log-container {
+    .drop-zone {
+      border: 1px dashed #007bff;
+      border-radius: 5px;
+      padding: 10px;
+      min-height: 50px;
       display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .log-container {
       flex-direction: column;
-      align-items: center;
     }
-    .log-entry {
-      font-size: 1rem;
-      color: #555;
+    .placeholder {
+      height: 40px;
+      margin: 5px 0;
+      background-color: rgba(0, 123, 255, 0.3);
+      border-radius: 5px;
+    }
+    .hidden {
+      visibility: hidden; /* 드래그 중인 요소를 시각적으로 숨기기 */
+      position: absolute;
     }
   </style>
 </head>
 <body>
 
-  <h1>스탑워치</h1>
-  <div class="stopwatch" id="display">00:00:00</div>
-  <div class="buttons">
-    <button id="start">시작</button>
-    <button id="pause" disabled>일시정지</button>
-    <button id="reset">초기화</button>
-  </div>
-  <div class="log-container" id="logContainer">
-    <h2>일시정지 로그</h2>
+  <div class="container">
+    <div class="drop-zone" id="dropZone">
+      <div class="draggable-item" draggable="true">항목 1</div>
+      <div class="draggable-item" draggable="true">항목 2</div>
+      <div class="draggable-item" draggable="true">항목 3</div>
+      <div class="draggable-item" draggable="true">항목 4</div>
+    </div>
   </div>
 
   <script>
-    // 지금 스톱워치가 실행 중인지에 대한 여부
-    let isRunning = false;
-    // 스톱워치 인터벌의 아이디를 저장할 변수
-    let timerInterval;
-    // 누적 시간을 측정할 변수 - 경과시간
-    let elapsedTime = 0; // 단위 : 밀리초
+    // 드래그 중인 요소와 플레이스홀더를 저장할 변수
+    let draggedItem = null;
+    let placeholder = document.createElement('div'); 
+    placeholder.classList.add('placeholder');
 
-    // 시간이 렌더링될 태그를 가져옴
-    const $display = document.getElementById('display');
+    // 드롭 영역 (dropZone) 가져오기
+    const $dropZone = document.getElementById('dropZone');
 
-    // 버튼들을 가져옴
-    const [$startBtn, $pauseBtn, $resetBtn] 
-      = [...document.querySelector('.buttons').children];
+    // 드래그 시작 이벤트 - 드래그 중인 요소 숨기기
+    $dropZone.addEventListener('dragstart', (e) => {
+      draggedItem = e.target.closest('.draggable-item'); // 드래그 중인 요소 저장
+      setTimeout(() => draggedItem.classList.add('hidden'), 0); // 요소를 숨기기 위해 클래스를 추가
+    });
 
-    // 로그컨테이너를 가쟈옴
-    const $logContainer = document.getElementById('logContainer');
+    // 드래그 종료 이벤트 - 드래그가 끝나면 원래 자리로 되돌리기
+    $dropZone.addEventListener('dragend', (e) => {
+      draggedItem.classList.remove('hidden'); // 숨겨진 요소 다시 표시
+      placeholder.remove(); // 드래그 완료 후 플레이스홀더 제거
+      draggedItem = null; // 드래그 중인 요소 초기화
+    });
 
-    // 경과 시간을 포맷팅 (분:초:밀리초)하는 함수
-    function formatElapsedTime() {
-      // 경과시간을 00분 00초 00밀리초 형태로 변환
-      const minutes = String(Math.floor(elapsedTime / 60000)).padStart(2, "0");
-      const seconds = String(Math.floor((elapsedTime % 60000) / 1000)).padStart(2, "0");
-      const millisecond = String(Math.floor((elapsedTime % 1000) / 10)).padStart(2, '0');
-      
-      // 지속적인 경과시간을 화면에 렌더링
-      $display.textContent = `${minutes}:${seconds}:${millisecond}`;
-    }
+    // 드래그 오버 이벤트 - 드래그 중에 아이템을 다른 아이템 위에 올릴 때 발생
+    $dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault(); // 기본 브라우저 동작을 막아 드롭 가능하게 설정
+      const target = e.target; // 드래그 오버 중인 요소를 타겟으로 설정
 
-    // 시작상태, 버튼 활성화 상태를 처리하는 함수
-    // @param - isStart : true이면 시작상태, false면 리셋상태
-    function changeStartState(isStart) {
-      isRunning = isStart;
-      $startBtn.disabled = isStart;
-      $pauseBtn.disabled = !isStart;
-    }
+      // 현재 마우스 위치에 따라 플레이스홀더 위치 설정
+      if (target.classList.contains('draggable-item') && target !== draggedItem) {
+        const bounding = target.getBoundingClientRect(); // 대상 요소의 크기와 위치 정보 가져오기
+        const offset = e.clientY - bounding.top; // 마우스와 요소 상단 간의 거리 계산
 
-    // 시작 기능 이벤트 핸들러 정의
-    const startStopwatch = (e) => {
-      
-      changeStartState(true);
-      
-      // 인터벌이 시작될 때 아이디를 timerInterval에 저장
-      timerInterval = setInterval(() => {
-        elapsedTime += 10; // 10밀리초씩 경과시간을 갱신
-        // 시간 포맷팅
-        formatElapsedTime();
-      }, 10); // 실제 시간이 10밀리초씩 반복 증가
-    };
+        // 마우스 위치가 요소의 상/하 절반에 따라 플레이스홀더 위치 결정
+        if (offset < bounding.height / 2) {
+          target.before(placeholder); // 절반 위쪽일 경우 앞에 삽입
+        } else {
+          target.after(placeholder); // 절반 아래쪽일 경우 뒤에 삽입
+        }
+      } 
+     
+    });
 
-    // 일시정지 시간 로그 찍기
-    function logStopwatchTime() {
-      
-      // 현재 멈춘 시간을 읽어서 로그컨테이너에 추가
-      const stopTime = $display.textContent;
-      const $newDiv = document.createElement('div');
-      $newDiv.textContent = stopTime;
-
-      $logContainer.append($newDiv);
-    }
-
-    // 일시정지를 수행하는 이벤트 핸들러
-    function pauseStopwatch(e) {
-      if (isRunning) { // 현재 스톱워치가 실행중인 경우
-        // 일시정지를 시켜줘야 함
-        // 스톱워치를 중단 -> 인터벌을 해제
-        clearInterval(timerInterval);
-        isRunning = false; // 실행 상태 변경
-        // 버튼 텍스트 변경
-        $pauseBtn.textContent = '재개';
-
-        // 일시정지 시간로그 찍기
-        logStopwatchTime();
-
-      } else { // 스톱워치가 중단되어 있는 경우
-        // 재개를 시켜줘야 함 : 다시 인터벌을 가동
-        startStopwatch();
-        // 버튼 텍스트 변경
-        $pauseBtn.textContent = '일시정지';
+    // 드롭 이벤트 - 드롭 위치에 드래그한 요소 배치
+    $dropZone.addEventListener('drop', (e) => {
+      e.preventDefault(); // 기본 동작 방지하여 드롭 설정 가능
+      // 플레이스홀더가 바로 앞이나 뒤에 있을 경우 이동하지 않음
+      if (draggedItem === placeholder.nextElementSibling || draggedItem === placeholder.previousElementSibling) {
+        placeholder.remove(); // 필요 없는 경우 플레이스홀더 제거
+      } else {
+        placeholder.replaceWith(draggedItem); // 플레이스홀더 위치에 드래그한 요소 추가
       }
-    };
+    });
+  </script>
 
-    // 초기 상태로 되돌리는 이벤트 핸들러
-    function resetStopwatch(e) {
-      $display.textContent = '00:00:00';
-      elapsedTime = 0;
-      clearInterval(timerInterval);
-      changeStartState(false);
-      $pauseBtn.textContent = '일시정지';
-      $logContainer.innerHTML = '<h2>일시정지 로그</h2>'; // 로그 초기화
-    }
-    
-    // 시작버튼에 이벤트 리스너 등록
-    $startBtn.addEventListener('click', startStopwatch);
-    // 일시정지 버튼에 이벤트 리스너 등록
-    $pauseBtn.addEventListener('click', pauseStopwatch);
-    // 초기화 버튼에 이벤트 리스너 등록
-    $resetBtn.addEventListener('click', resetStopwatch);
-
-    </script>
 </body>
 </html>
