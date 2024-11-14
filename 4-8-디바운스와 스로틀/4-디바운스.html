@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>디바운스 예제 - 음식 검색</title>
+  <style>
+    .container {
+      width: 300px;
+      margin: 50px auto;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    .results {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #333;
+    }
+    .result-item {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>음식 검색창</h2>
+    <input type="text" id="searchInput" placeholder="음식 이름을 입력하세요...">
+    <div class="results" id="results">검색 결과가 여기에 표시됩니다.</div>
+  </div>
+
+  <script>
+
+    const foodItems = [
+      "김치", "불고기", "비빔밥", "잡채", "갈비", "떡볶이", "삼계탕", "김밥", "순두부찌개", "된장찌개",
+      "감자탕", "양념치킨", "제육볶음", "보쌈", "족발", "파전", "해물파전", "순대", "오뎅", "설렁탕",
+      "물냉면", "비빔냉면", "치킨", "삼겹살", "곱창", "막창", "쌈밥", "콩나물국", "미역국", "떡국",
+      "만둣국", "닭갈비", "곰탕", "육개장", "우거지국", "북어국", "매운탕", "해장국", "부대찌개", "동태찌개",
+      "감자전", "김치전", "갈치조림", "고등어조림", "제육덮밥", "생선구이", "장어구이", "오징어볶음", "낙지볶음", "볶음밥",
+      "새우튀김", "탕수육", "짬뽕", "짜장면", "라면", "된장국", "어묵탕", "순두부", "떡만두국", "찜닭",
+      "비빔국수", "칼국수", "수제비", "물만두", "잡채밥", "돈까스", "가츠동", "카레라이스", "참치김밥", "새우볶음밥",
+      "육회", "고기국수", "돼지국밥", "순대국", "오징어순대", "곱창전골", "홍어회", "회덮밥", "쫄면", "라볶이",
+      "새우장", "간장게장", "양념게장", "알탕", "연포탕", "오리주물럭", "닭발", "닭강정", "청국장", "피순대",
+      "돌솥비빔밥", "버섯전골", "감자채볶음", "마파두부", "순살치킨", "수육", "양곰탕", "샤부샤부", "닭죽", "콩국수"
+    ];
+
+    // 입력창 가져오기
+    const $searchInput = document.getElementById('searchInput');
+    // 검색목록을 가져오기
+    const $results = document.getElementById('results');
+
+    function searchUser(username, address) {
+
+    }
+
+    // 검색어에 맞는 음식들을 서버에서 가져와서 화면에 렌더링
+    function searchFoods(query) {
+      console.log('서버에 검색데이터 요청중...');
+      
+      // 배열에서 검색어가 포함된 음식이름들만 필터링
+      const filteredFoods = foodItems.filter(food => food.includes(query));
+
+      if (filteredFoods.length > 0) {
+        // 이전 검색 결과를 지우기
+        $results.innerHTML = '';
+        filteredFoods.forEach(food => {
+          const $div = document.createElement('div');
+          $div.classList.add('result-item');
+          $div.textContent = food;
+          $results.append($div);
+        });
+      } else {
+        $results.textContent = '일치하는 음식이 없습니다.';
+      }
+      
+    }
+
+    // 디바운스 함수 정의
+    function debounce(callbackFn, delay) {
+      let timerId; 
+      return (...param) => {
+        clearTimeout(timerId); // 기존 타이머가 있다면 해제
+        timerId = setTimeout(() => callbackFn(...param), delay);
+      };
+    }
+
+    
+    // 검색시 실행될 이벤트 핸들러
+    function searchHandler(e) {
+      //검색어
+      const query = e.target.value;
+      // 검색을 수행
+      // 입력 후 1초 후 검색 수행
+      searchFoods(query);
+    }
+
+    $searchInput.addEventListener('input', debounce(searchHandler, 1000));
+
+  </script>
+
+</body>
+</html>

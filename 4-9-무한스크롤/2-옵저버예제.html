@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>Intersection Observer를 이용한 무한 스크롤 예제</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+      }
+      .content-container {
+        width: 80%;
+        max-width: 600px;
+        margin: 20px auto;
+      }
+      .content-item {
+        padding: 20px;
+        margin: 10px 0;
+        background-color: #f0f2f5;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 18px;
+      }
+      .loading {
+        margin: 20px;
+        font-size: 16px;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="content-container"
+      id="contentContainer">
+      <!-- 초기 콘텐츠 -->
+      <div class="content-item">초기 콘텐츠 1</div>
+      <div class="content-item">초기 콘텐츠 2</div>
+      <div class="content-item">초기 콘텐츠 3</div>
+      <div class="content-item">초기 콘텐츠 4</div>
+    </div>
+    <div
+      class="loading"
+      id="loading"
+      style="display: none">
+      새로운 콘텐츠 로딩 중...
+    </div>
+
+    <script>
+      const contentContainer = document.getElementById('contentContainer');
+      const loading = document.getElementById('loading');
+      let contentCount = 4; // 초기 콘텐츠 개수
+
+      // 새로운 콘텐츠를 로드하는 함수
+      function loadMoreContent() {
+        loading.style.display = 'block'; // 로딩 메시지 표시
+
+        setTimeout(() => {
+          for (let i = 0; i < 4; i++) {
+            contentCount++;
+            const newContent = document.createElement('div');
+            newContent.classList.add('content-item');
+            newContent.textContent = `추가된 콘텐츠 ${contentCount}`;
+            contentContainer.appendChild(newContent);
+          }
+          loading.style.display = 'none'; // 로딩 메시지 숨기기
+
+          // 로딩이 끝나면 감시대상 교체
+          observeLastElement();
+
+        }, 1000);
+      }
+
+      // Intersection Observer 설정
+      // 특정 태그를 지속적으로 감시하게 하여 해당 태그가 뷰포트에 보이는 순간
+      // 특정 행동을 실행
+
+      // 옵저버 생성
+      // callback: 감시대상을 제어하는 함수
+      const observer = new IntersectionObserver((entries) => {
+        // entries: 현재 감시하고 있는 대상
+        console.log('entries: ', entries[0]);
+
+        // isIntersecting : 감시대상이 현재 보이는 순간 true
+        if (entries[0].isIntersecting) {
+          // 추가컨텐츠 로드
+          loadMoreContent();
+        }
+      }, {
+        threshold: 1
+      }); // threshold: 0 ~ 1 , 1일경우 감시대상이 화면에 100%보일 때 로드를실행
+
+      // 옵저버에게 특정 태그를 감시하도록 설정
+      // 마지막 컨텐츠를 감시하도록 설정
+      function observeLastElement() {
+        const $lastContent = contentContainer.lastElementChild;
+        observer.observe($lastContent);
+      }
+
+      observeLastElement(); // 초기에 첫 감시대상 설정
+
+    </script>
+  </body>
+</html>

@@ -1,4 +1,8 @@
 //========= 전역 변수 영역 ========//
+
+// 현재 수정모드에 들어갔는지 여부
+let isEnterMode = false;
+
 // 서버와 통신할 데이터
 let todos = [
   {
@@ -107,7 +111,7 @@ function todoRemoveHandler(e) {
 
 // 할 일 완료 체크 처리
 function todoDoneHandler(e) {
-  if (!e.target.matches('.checkbox input')) return;
+  if (!e.target.matches('.checkbox input[type=checkbox]')) return;
 
   // 배열에서 클릭한 타겟의 근처 li태그를 찾아서
   const $targetLi = e.target.closest('.todo-list-item');
@@ -122,6 +126,62 @@ function todoDoneHandler(e) {
   renderTodos();
 }
 
+// 수정 모드 진입 이벤트 핸들러
+function todoEnterModifyModeHandler(e) {
+  if (isEnterMode || !e.target.matches('.modify span.lnr-undo')) return;
+
+  isEnterMode = true;
+  /*
+    1. span.text를 input.modify-input으로 교체
+     - 클릭한 버튼 근처에 있는 span.text를 탐색
+     - input태그를 type=text로 생성하여 클래스를 부여
+     - 태그를 교체함
+    2. 수정 아이콘 교체
+  */
+  const $textSpan = e.target
+    .closest('li.todo-list-item')
+    .querySelector('span.text');
+  
+  const $newInput = document.createElement('input');
+  $newInput.setAttribute('type', 'text');
+  $newInput.classList.add('modify-input');
+  // 기존 텍스트 가져오기
+  $newInput.value = $textSpan.textContent;
+  
+  const $label = $textSpan.parentElement;
+  $label.replaceChild($newInput, $textSpan);
+  
+  // 아이콘 교체 -> span.lnr-undo의 클래스만 교체하면된다.
+  setTimeout(() => { 
+    e.target.classList.replace('lnr-undo', 'lnr-checkmark-circle');
+  }, 0);
+}
+
+// 수정 완료 처리
+function todoModifyHandler(e) {
+  
+  if (!e.target.matches('.modify span.lnr-checkmark-circle')) return;
+  /*
+    1. 배열에 접근해서 text프로퍼티를 새로운 값으로 수정
+    - 클릭한 태그 근처에 있는 data-id를 확보
+    - data-id로 배열을 탐색하여 id가 일치하는 객체를 가져온다
+    - input의 새로운 입력값을 읽어온다
+    - 객체의 text프로퍼티를 수정한다.
+    2. 배열 리렌더링
+  */
+  const $li = e.target.closest('.todo-list-item');
+  const dataId = $li.dataset.id;
+  const foundTodo = todos.find(todo => todo.id === dataId);
+  const $textInput = $li.querySelector('.modify-input');
+  const newText = $textInput.value;
+  
+  foundTodo.text = newText;
+
+  renderTodos();
+
+  isEnterMode = false;
+  
+}
 //========= 이벤트 핸들러 등록 영역 ========//
 
 // 할 일 추가 기능
@@ -131,16 +191,9 @@ $todoListUl.addEventListener('click', todoRemoveHandler);
 // 할 일 완료 체크 기능
 $todoListUl.addEventListener('click', todoDoneHandler);
 // 할 일 수정모드 진입 기능
-/*
-  1. span.text를 input.modify-input으로 교체
-  2. 수정 아이콘 교체
-*/
-
+$todoListUl.addEventListener('click', todoEnterModifyModeHandler);
 // 수정 완료 기능
-/*
-  1. 배열에 접근해서 text프로퍼티를 새로운 값으로 수정
-  2. 배열 리렌더링
-*/
+$todoListUl.addEventListener('click', todoModifyHandler);
 
 //========= 코드 실행 영역 ========//
 

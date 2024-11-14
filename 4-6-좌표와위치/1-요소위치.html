@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>좌표와 위치 계산 예제</title>
+  <style>
+    body {
+      height: 2000px;
+    }
+    .box {
+      width: 100px;
+      height: 100px;
+      padding: 10px;
+      border: 1px solid #000;
+      box-sizing: border-box;
+
+      background-color: #007bff;
+      position: absolute;
+      top: 150px;
+      left: 150px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box" id="box">박스</div>
+  <button id="moveButton">이동</button>
+
+  <script>
+    const box = document.getElementById('box');
+    const moveButton = document.getElementById('moveButton');
+
+    // "이동" 버튼 클릭 시 박스 위치 이동
+    moveButton.addEventListener('click', () => {
+      // 현재 박스의 위치와 크기 정보 가져오기
+      const rect = box.getBoundingClientRect();
+      console.log(rect);
+      
+
+      console.log('현재 박스 위치:');
+      console.log(`Top: ${rect.top}, Left: ${rect.left}`);
+      console.log(`Width: ${rect.width}, Height: ${rect.height}`);
+
+      // 박스의 위치를 50px씩 오른쪽과 아래로 이동
+      box.style.top = `${rect.top + 50}px`;
+      box.style.left = `${rect.left + 50}px`;
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      // console.log(`x: ${e.clientX}, y: ${e.clientY}`);
+    });
+    
+    document.addEventListener('scroll', e => {
+      // console.log(`스크롤 위치: ${window.scrollY}`);
+      if (window.scrollY >= 250) {
+        document.body.style.background = 'violet';
+      } else {
+        document.body.style.background = 'transparent';
+      }
+    });
+
+  </script>
+
+</body>
+</html>

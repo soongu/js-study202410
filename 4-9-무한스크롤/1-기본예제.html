@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>무한 스크롤 예제 - 스로틀 적용</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+    }
+    .content-container {
+      width: 80%;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+    .content-item {
+      padding: 20px;
+      margin: 10px 0;
+      background-color: #f0f2f5;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 18px;
+    }
+    .loading {
+      margin: 20px;
+      font-size: 16px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="content-container" id="contentContainer">
+    <!-- 초기 콘텐츠 -->
+    <div class="content-item">초기 콘텐츠 1</div>
+    <div class="content-item">초기 콘텐츠 2</div>
+    <div class="content-item">초기 콘텐츠 3</div>
+    <div class="content-item">초기 콘텐츠 4</div>
+    <div class="content-item">초기 콘텐츠 5</div>
+    <div class="content-item">초기 콘텐츠 6</div>
+    <div class="content-item">초기 콘텐츠 7</div>
+    <div class="content-item">초기 콘텐츠 8</div>
+  </div>
+  <div class="loading" id="loading" style="display: none;">새로운 콘텐츠 로딩 중...</div>
+
+  <script>
+
+    // 스로틀 함수 정의
+    const throttle = (func, delay) => {
+      let throttleTimeout = null;
+      return (...args) => {
+        if (!throttleTimeout) {
+          throttleTimeout = setTimeout(() => {
+            func(...args);
+            throttleTimeout = null;
+          }, delay);
+        }
+      };
+    };
+
+    let initCount = 8;
+    // 새로운 컨텐츠를 태그로 4개씩 추가
+    function loadMoreContent() {
+      // 로딩메시지 보여주기
+      const $loading = document.getElementById('loading');
+      $loading.style.display = 'block';
+
+      // 실제 서버처럼 약간의 지연 추가
+      setTimeout(() => {
+        for (let i = 0; i < 4; i++) {
+          const $div = document.createElement('div');
+          $div.classList.add('content-item');
+          $div.textContent = `추가된 컨텐츠 ${++initCount}`;
+          document.getElementById('contentContainer').append($div);
+        }
+        // 로딩 메시지 숨기기
+        $loading.style.display = 'none';
+      }, 1500);
+    }
+
+    // 스크롤 이벤트 핸들러
+    function scrollHandler(e) {
+      // 스크롤이 최하단으로 갔다는 것을 감지
+      // 1. 스크롤의 y축 위치
+      const scrollTop = window.scrollY;
+      // console.log('스크롤위치: ', scrollTop);
+      
+      // 2. 뷰포트의 높이 (현재 브라우저에서 보이는 높이)
+      const windowHeight = window.innerHeight;
+      // console.log('뷰포트높이: ', windowHeight);
+
+      // 3. 문서 전체의 높이 (보이지 않는 부분까지 포함한 높이)
+      const documentHeight = document.body.offsetHeight;
+      // console.log('문서전체높이: ', documentHeight);
+
+      // 페이지스크롤이 하단에 가까워졌을 때 새 컨텐츠를 로딩
+      if (scrollTop + windowHeight >= documentHeight - 100) {
+        loadMoreContent();
+      }
+    
+    }
+
+    // 스크롤 이벤트 설정
+    window.addEventListener('scroll', throttle(scrollHandler, 1000));
+  </script>
+
+</body>
+</html>

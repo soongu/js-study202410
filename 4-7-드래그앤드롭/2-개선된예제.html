@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>드래그 앤 드롭 예제</title>
+  <style>
+    .container {
+      width: 300px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+    .draggable-item {
+      padding: 10px;
+      margin: 5px 0;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: grab;
+    }
+    .drop-zone {
+      border: 1px dashed #007bff;
+      border-radius: 5px;
+      padding: 10px;
+      min-height: 50px;
+      display: flex;
+      flex-direction: column;
+    }
+    .hidden {
+      display: none;
+    }
+    .placeholder {
+      height: 40px;
+      margin: 5px 0;
+      background-color: rgba(0, 123, 255, 0.3);
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="drop-zone" id="dropZone">
+      <div class="draggable-item" draggable="true">항목 1</div>
+      <div class="draggable-item" draggable="true">항목 2</div>
+      <div class="draggable-item" draggable="true">항목 3</div>
+      <div class="draggable-item" draggable="true">항목 4</div>
+    </div>
+  </div>
+
+  <script>
+    // 드래그 중인 태그를 저장
+    let draggedItem = null;
+    const $dropZone = document.getElementById('dropZone');
+
+    // 드래그시에 화면에 그려줄 빈 박스 생성
+    const $placeholder = document.createElement('div');
+    $placeholder.classList.add('placeholder');
+
+    // 드래그 시작이벤트
+    $dropZone.addEventListener('dragstart', e => {
+      // console.log('드래그 시작!');
+      draggedItem = e.target;
+
+      // 드래그하고 있는 요소를 화면에서 숨기고 싶다.
+      setTimeout(() => {
+        e.target.classList.add('hidden');      
+      }, 0);
+    });
+
+    // 드래그 끝 이벤트
+    $dropZone.addEventListener('dragend', e => {
+      // console.log(e.target);
+      e.target.classList.remove('hidden');
+      draggedItem = null;
+      // 빈 박스 제거
+      $placeholder.remove();
+    });
+
+    // 드롭시 문제가 발생하는 이유
+    // 기본적으로 브라우저는 드래그한 요소가 다른 요소 위에 있는 것을 방지함
+    // 드래그 오버이벤트를 설정해서 이걸 허용하도록 해야함
+    $dropZone.addEventListener('dragover', e => {
+      e.preventDefault();
+
+      // 현재 드래그 중인 마우스 위치에 따라 빈 박스 위치 설정
+      // e.target: 드래그요소로 덮고 있는 요소
+      // draggedItem: 실제로 드래그하고 있는 요소
+      const $target = e.target;
+      if (
+        $target !== draggedItem
+        && $target.classList.contains('draggable-item')
+      ) {
+        // target의 위치정보를 확인
+        const bounding = $target.getBoundingClientRect();
+        // 마우스 포인터와 target의 top과의 거리를 계산
+        const offset = e.clientY - bounding.top;
+        
+        if (offset < bounding.height / 2) {
+          $target.before($placeholder);
+        } else {
+          $target.after($placeholder);
+        }
+      }
+      
+    });
+
+    // 드롭 이벤트
+    $dropZone.addEventListener('drop', e => {
+      // 파일이나 이미지를 드롭하면 새탭에서 이미지가 열리거나
+      // 파일이 다운로드되는 현상을 방지
+      e.preventDefault();
+      // drop이벤트에서의 e.target은 드래그하고 있는 요소가 아니라
+      // 드롭위치에 있었던 요소가 타겟으로 지정됨
+      // console.log(draggedItem);
+      if (draggedItem) {
+        // $dropZone.append(draggedItem);
+        $placeholder.replaceWith(draggedItem);
+      }
+    });
+  </script>
+
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>스로틀 예제 - 스크롤 최적화</title>
+  <style>
+    body {
+      height: 2000px;
+      font-family: Arial, sans-serif;
+    }
+    .header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 60px;
+      background-color: #333;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">스크롤 이벤트 최적화 예제</div>
+
+  <script>
+    // 스로틀 함수 정의
+    const throttle = (func, delay) => {
+      let throttleTimeout = null;
+      return (...args) => {
+        if (!throttleTimeout) {
+          throttleTimeout = setTimeout(() => {
+            func(...args);
+            throttleTimeout = null;
+          }, delay);
+        }
+      };
+    };
+
+    // 스크롤 핸들러
+    const handleScroll = () => {
+      console.log("스크롤 이벤트 발생!");
+    };
+
+    // 스크롤 이벤트 리스너 추가
+    window.addEventListener('scroll', throttle(handleScroll, 2000));
+  </script>
+
+</body>
+</html>

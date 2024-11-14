@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .counter {
+      width: 40%;
+      margin: 50px auto;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="counter">
+    <h1>초콜릿 개수</h1>
+    <h2 class="count1">0</h2>
+    <button id="decrease1"> - </button>
+    <button id="increase1"> + </button>
+  </div>
+
+  <div class="counter">
+    <h1>치즈 개수</h1>
+    <h2 class="count2">0</h2>
+    <button id="decrease2"> - </button>
+    <button id="increase2"> + </button>
+  </div>
+
+  <script>
+    // let count = 0;
+    // let count2 = 0;
+    // + 를 처리하는 함수
+    // function increase() {
+    //   return ++count;
+    // }
+    // function increase2() {
+    //   return ++count2;
+    // }
+
+    function increaseClosure() {
+      let count = 0;
+      return {
+        increment: () => ++count,
+        decrement: () => --count,
+      };
+    }
+    const inc1 = increaseClosure();
+    const inc2 = increaseClosure();
+    const increase = inc1.increment;
+    const increase2 = inc2.increment;
+    const decrease1 = inc1.decrement;
+    const decrease2 = inc2.decrement;
+
+    document.getElementById('increase1').addEventListener('click', e => {
+      document.querySelector('.count1').textContent = increase();
+    });
+    document.getElementById('increase2').addEventListener('click', e => {
+      document.querySelector('.count2').textContent = increase2();
+    });
+    document.getElementById('decrease1').addEventListener('click', e => {
+      document.querySelector('.count1').textContent = decrease1();
+    });
+    document.getElementById('decrease2').addEventListener('click', e => {
+      document.querySelector('.count2').textContent = decrease2();
+    });
+  </script>
+</body>
+</html>
