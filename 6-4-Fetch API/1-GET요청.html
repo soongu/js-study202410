@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>게시물 가져오기 - 실전 예제</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f6f7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    #posts {
+      width: 80%;
+      max-width: 700px;
+      margin-top: 20px;
+    }
+    .post {
+      padding: 20px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .post:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    .post-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .post-body {
+      font-size: 16px;
+      color: #555;
+      line-height: 1.5;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+      transition: background-color 0.3s;
+      margin-bottom: 20px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>게시물 목록</h1>
+  <button id="fetchPosts">데이터 가져오기</button>
+  <div id="posts"></div>
+
+  <script>
+
+    // 게시물을 화면에 표시하는 함수
+    function displayPosts(posts) {
+      const postsContainer = document.getElementById("posts");
+      postsContainer.innerHTML = ""; // 기존 콘텐츠 초기화
+
+      posts.forEach(post => {
+        const postElement = document.createElement("div");
+        postElement.classList.add("post");
+
+        postElement.innerHTML = `
+          <div class="post-title">${post.title}</div>
+          <div class="post-body">${post.body}</div>
+        `;
+
+        postsContainer.append(postElement);
+      });
+    }
+
+    const requestUrl = `https://jsonplaceholder.typicode.com/posts`;
+    const $fetchBtn = document.getElementById('fetchPosts');
+    $fetchBtn.addEventListener('click', e => {
+      // 서버에 요청 보내기
+      fetch(requestUrl)
+        .then(res => res.json()) // 첫번째 프로미스체인에서 응답정보가 통째로옴
+        .then(result => {
+          displayPosts(result);
+        });
+    });
+  </script>
+</body>
+</html>

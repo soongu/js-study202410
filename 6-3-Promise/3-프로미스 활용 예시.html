@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>게시물 가져오기 - 실전 예제</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f6f7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    #posts {
+      width: 80%;
+      max-width: 700px;
+      margin-top: 20px;
+    }
+    .post {
+      padding: 20px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .post:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    .post-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .post-body {
+      font-size: 16px;
+      color: #555;
+      line-height: 1.5;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+      transition: background-color 0.3s;
+      margin-bottom: 20px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>게시물 목록</h1>
+  <button id="fetchPosts">데이터 가져오기</button>
+  <div id="posts"></div>
+
+  <script>
+    // 서버에서 게시물 데이터를 가져오는 함수 (Promise 사용)
+    function fetchPosts() {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://jsonplaceholder.typicode.com/posts");
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            resolve(JSON.parse(xhr.responseText)); // 성공적으로 데이터 가져오기
+          } else {
+            reject("데이터를 가져오는 데 실패했습니다.");
+          }
+        };
+        xhr.onerror = () => reject("네트워크 오류가 발생했습니다.");
+        xhr.send();
+      });
+    }
+
+    // 게시물을 화면에 표시하는 함수
+    function displayPosts(posts) {
+      const postsContainer = document.getElementById("posts");
+      postsContainer.innerHTML = ""; // 기존 콘텐츠 초기화
+
+      posts.forEach(post => {
+        const postElement = document.createElement("div");
+        postElement.classList.add("post");
+
+        postElement.innerHTML = `
+          <div class="post-title">${post.title}</div>
+          <div class="post-body">${post.body}</div>
+        `;
+
+        postsContainer.append(postElement);
+      });
+    }
+
+    // 데이터 가져오기 버튼 클릭 시 이벤트
+    document.getElementById("fetchPosts").addEventListener("click", () => {
+      // 로딩 중 메시지 표시
+      const postsContainer = document.getElementById("posts");
+      postsContainer.innerHTML = "<p>데이터를 불러오는 중입니다...</p>";
+
+      fetchPosts()
+        .then(posts => {
+          // 성공했을 때 실행
+          displayPosts(posts.slice(0, 5)); // 상위 5개의 게시물만 표시
+        })
+        .catch(error => {
+          // 실패했을 때만 실행
+          postsContainer.innerHTML = `<p style="color: red;">${error}</p>`;
+        })
+        .finally(() => {
+          // 성공해도 실행, 실패해도 실행
+          console.log("데이터 요청 완료");
+        });
+    });
+  </script>
+</body>
+</html>

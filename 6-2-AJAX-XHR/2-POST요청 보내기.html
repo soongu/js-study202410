@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    form {
+      width: 70%;
+      margin: 150px auto;
+    }
+    label {
+      display: block;
+    }
+    label:nth-child(2) {
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+</head>
+<body>
+  <form>
+    <label>
+      글 제목: <input type="text" id="title">
+    </label>
+    <label>
+      글 내용: <textarea id="content" cols="20" rows="10"></textarea>
+    </label>
+    <label>
+      <button id="add">글 쓰기</button>
+    </label>
+  </form>
+
+  <script>
+    const $addBtn = document.getElementById('add');
+    $addBtn.addEventListener('click', e => {
+      e.preventDefault();
+
+      // 서버에 새 게시물을 등록하는 요청
+      const requestUrl = `https://jsonplaceholder.typicode.com/posts`;
+
+      // 통신을 위한 객체 생성
+      const xhr = new XMLHttpRequest();
+
+      // 요청 세팅
+      xhr.open('POST', requestUrl);
+
+      // 서버에 보낼 정보를 생성
+      const userInputData = {
+        title: document.getElementById('title').value,
+        body: document.getElementById('content').value,
+        userId: 1
+      };
+      const JsonUserData = JSON.stringify(userInputData);
+
+      // 요청을 보낼 때 보내는 데이터가 뭔지를 써야 함
+      xhr.setRequestHeader('Content-Type', 'application/json');
+
+      // 서버에 요청 보내기
+      xhr.send(JsonUserData);
+
+      // 응답 받기
+      xhr.addEventListener('load', e => {
+        console.log(xhr);
+      });
+      
+    });
+  </script>
+</body>
+</html>

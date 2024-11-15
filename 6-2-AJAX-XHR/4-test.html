@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub 프로필 조회</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #f5f5f5;
+    }
+    #search-container {
+      margin-top: 20px;
+    }
+    #profile {
+      margin-top: 20px;
+      padding: 20px;
+      width: 300px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background-color: #fff;
+    }
+    #repos {
+      margin-top: 10px;
+      width: 300px;
+    }
+    .repo-item {
+      padding: 10px;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      background-color: #e9e9e9;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="search-container">
+    <input type="text" id="username" placeholder="GitHub 사용자 이름을 입력하세요" />
+    <button id="searchButton">조회</button>
+  </div>
+
+  <div id="profile"></div>
+  <div id="repos"></div>
+
+  <script>
+    const searchButton = document.getElementById('searchButton');
+    const profileContainer = document.getElementById('profile');
+    const reposContainer = document.getElementById('repos');
+
+    searchButton.addEventListener('click', async () => {
+      const username = document.getElementById('username').value.trim();
+      if (!username) return alert('사용자 이름을 입력하세요.');
+
+      // GitHub API 요청 함수
+      async function fetchGitHubUser(username) {
+        try {
+          // 사용자 프로필 정보 가져오기
+          const profileResponse = await fetch(`https://api.github.com/users/${username}`);
+          if (!profileResponse.ok) throw new Error('사용자 정보를 가져올 수 없습니다.');
+          const profileData = await profileResponse.json();
+          console.log(profileData);
+          
+          displayProfile(profileData);
+
+          // 사용자 저장소 목록 가져오기
+          const reposResponse = await fetch(`https://api.github.com/users/${username}/repos`);
+          if (!reposResponse.ok) throw new Error('저장소 정보를 가져올 수 없습니다.');
+          const reposData = await reposResponse.json();
+          console.log(reposData);
+          
+          displayRepos(reposData);
+
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+
+      // 프로필 정보 표시 함수
+      function displayProfile(data) {
+        profileContainer.innerHTML = `
+          <img src="${data.avatar_url}" alt="${data.login}" width="80" height="80" style="border-radius: 50%;">
+          <h2>${data.name || data.login}</h2>
+          <p>팔로워: ${data.followers} | 팔로잉: ${data.following}</p>
+          <p><a href="${data.html_url}" target="_blank">GitHub 프로필 보기</a></p>
+        `;
+      }
+
+      // 저장소 목록 표시 함수
+      function displayRepos(repos) {
+        reposContainer.innerHTML = '<h3>저장소 목록</h3>';
+        repos.forEach(repo => {
+          const repoElement = document.createElement('div');
+          repoElement.classList.add('repo-item');
+          repoElement.innerHTML = `
+            <strong><a href="${repo.html_url}" target="_blank">${repo.name}</a></strong>
+            <p>⭐ ${repo.stargazers_count} | 🍴 ${repo.forks_count}</p>
+          `;
+          reposContainer.appendChild(repoElement);
+        });
+      }
+
+      // 사용자 정보 요청
+      await fetchGitHubUser(username);
+    });
+  </script>
+
+</body>
+</html>

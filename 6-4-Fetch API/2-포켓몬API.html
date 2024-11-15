@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button id="prev">이전</button>
+  <button id="next">다음</button>
+
+  <script>
+    const $prev = document.getElementById('prev');
+    const $next = document.getElementById('next');
+    
+    let offset = 0;
+
+    $prev.addEventListener('click', e => {
+      offset -= 20;
+      getPokemon();
+    });
+    $next.addEventListener('click', e => {
+      offset += 20;
+      getPokemon();
+    });
+
+    // 포켓몬 api 통신
+    function getPokemon() {
+      fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=20`)
+        .then(res => res.json())
+        .then(result => {
+          console.log(result.results);
+        });
+    }
+    getPokemon();
+    
+  </script>
+</body>
+</html>

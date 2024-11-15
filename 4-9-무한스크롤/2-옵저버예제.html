@@ -86,7 +86,7 @@
       // callback: 감시대상을 제어하는 함수
       const observer = new IntersectionObserver((entries) => {
         // entries: 현재 감시하고 있는 대상
-        console.log('entries: ', entries[0]);
+        console.log('entries: ', entries);
 
         // isIntersecting : 감시대상이 현재 보이는 순간 true
         if (entries[0].isIntersecting) {

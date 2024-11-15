@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 실제 작업 실행기
+    const executor = (resolve, reject) => {
+      const isSuccess = true; 
+      if (isSuccess) {
+        resolve({
+          message: '야호! 신난다!',
+          numbers: [1,2,3,4]
+        }); // 성공했을 때 실행할 콜백
+      } else {
+        reject('실패했다. 주방에 불났다.'); // 실패했을 때 실행할 콜백
+      }
+    };
+    // 비동기 작업
+    const myPromise1 = new Promise(executor);
+    // console.log(myPromise1);
+
+    // 프로미스 체인
+    // then() : 첫번째 프로미스가 성공했을 때 실행할 내용
+    const myPromise2 = myPromise1.then((result) => {
+      const msg = result.message;
+      return new Promise((resolve, reject) => {
+        resolve(msg);
+      });
+    });
+    // console.log(myPromise2);
+
+    const myPromise3 = myPromise2.then(result => {
+      const moreMessage = result + ' 메롱메롱~~';
+      return new Promise((resolve, reject) => {
+        resolve(moreMessage);
+      });
+    });
+    console.log(myPromise3);
+    
+    
+  </script>
+</body>
+</html>

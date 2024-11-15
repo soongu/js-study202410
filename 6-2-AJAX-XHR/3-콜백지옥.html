@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button id="fetchData">데이터 불러오기</button>
+
+  <script>
+    const serverUrl = `https://jsonplaceholder.typicode.com`;
+    
+    const $fetchBtn = document.getElementById('fetchData');
+
+    // 서버 통신을 수행하는 함수
+    function get(url, callbackFn) {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', url); // 요청 세팅
+      xhr.send();           // 요청 보내기
+      xhr.addEventListener('load', e => { // 응답 데이터 가져오기
+        const responseData = JSON.parse(xhr.responseText);
+        callbackFn(responseData);
+      });
+    }
+
+    $fetchBtn.addEventListener('click', e => {
+      // 1. 회원정보를 전체 조회한다.
+      get(`${serverUrl}/users`, (response) => {
+        const foundUser = response.find(user => user.id === 2);
+        // 2. 그중에 id가 2인 회원의 게시물정보를 조회한다.
+        get(`${serverUrl}/posts?userId=${foundUser.id}`, (response) => {
+          // 3. 그 회원이 쓴 첫번째 게시물의 댓글 목록을 조회한다.
+          const postId = response[0].id;
+          get(`${serverUrl}/posts/${postId}/comments`, (response) => {
+            console.log(response);
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

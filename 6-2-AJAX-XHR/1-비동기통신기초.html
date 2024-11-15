@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .post-item {
+      padding: 10px 20px;
+      border: 2px solid gray;
+      border-radius: 15px;
+      font-size: 20px;
+      box-sizing: border-box;
+      box-shadow: 2px 2px 5px black;
+      margin: 10px auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>서버에서 데이터 가져오기</h1>
+  <button id="fetchData">데이터 가져오기</button>
+  <p id="output"></p>
+
+  <script>
+    const $output = document.getElementById('output');
+    const $btn = document.getElementById('fetchData');
+    $btn.addEventListener('click', e => {
+
+      // 서버와 통신 시작
+      const url = `https://jsonplaceholder.typicode.com`;
+      const resource = `/posts`; // 서버에 있는 게시물
+
+      // 서버와의 통신을 대행해주는 객체
+      const xhr = new XMLHttpRequest();
+
+      // 요청 시작
+      /*
+        서버에 데이터를 요청할 때 사용하는 4가지 요청방법
+        1. GET : 조회
+        2. POST : 생성
+        3. PUT : 수정
+        4. DELETE : 삭제
+      */
+      xhr.open('GET', `${url}${resource}`);
+
+      // 요청 보내기
+      xhr.send();
+
+      // 서버 응답 데이터 가져오기
+      xhr.addEventListener('load', e => {
+
+        if (xhr.status === 200) {
+          const responseJSON = xhr.responseText;
+          /*
+            서버에서는 데이터를 JSON 포맷으로 응답한다.
+            JSON은 자바스크립트가 아니므로 
+            제대로 사용하기 위해서는 JSON을 JS로 변환해야 함
+
+            JSON -> JS : JSON.parse();
+            JS -> JSON : JSON.stringify();
+          */
+          const posts = JSON.parse(responseJSON);
+
+          // 화면에 게시판 형식으로 렌더링
+          posts.forEach(post => {
+            const $div = document.createElement('div');
+            $div.classList.add('post-item');
+            $div.textContent = `제목: ${post.title}`;
+            $output.append($div);
+          });          
+          
+        } else {
+          $output.textContent = '데이터를 가져오지 못했습니다.';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

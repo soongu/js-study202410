@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>스크롤 애니메이션 예제</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #6a11cb, #2575fc);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .header {
+      width: 100%;
+      padding: 50px 0;
+      text-align: center;
+      color: white;
+      font-size: 32px;
+      font-weight: bold;
+      background-color: rgba(0, 0, 0, 0.2);
+      margin-bottom: 30px;
+    }
+    .container {
+      width: 90%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      padding: 20px;
+    }
+    .content-item {
+      padding: 30px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      font-size: 24px;
+      opacity: 0;
+      transform: translateX(200px);
+      transition: 0.6s ease-out;
+    }
+    .content-item.animate {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">스크롤 애니메이션 예제</header>
+
+  <div class="container">
+    <div class="content-item">콘텐츠 1</div>
+    <div class="content-item">콘텐츠 2</div>
+    <div class="content-item">콘텐츠 3</div>
+    <div class="content-item">콘텐츠 4</div>
+    <div class="content-item">콘텐츠 5</div>
+    <div class="content-item">콘텐츠 6</div>
+    <div class="content-item">콘텐츠 7</div>
+    <div class="content-item">콘텐츠 8</div>
+  </div>
+
+  <script>
+
+    // 특정 태그를 감지하기 위해 옵저버를 생성
+    const observer = new IntersectionObserver(entries => {
+      // 감시 대상이 활성화(뷰포트에 보일 때)되었을 때 해야할 일을 지정
+      entries.forEach(entry => {
+        if (entry.isIntersecting) { // 감시 대상이 눈에 보일 때
+          entry.target.classList.add('animate');
+          // 감시대상이 화면에 나타나면 감시를 해제
+          observer.unobserve(entry.target);
+        }
+      }); // end foreach
+    }, {
+      threshold: 0.5
+    }); // observer
+
+    // 감시할 태그(모든 컨텐츠 태그)들을 감시하도록 설정
+    const $contentItems 
+      = [...document.querySelector('.container').children];
+    
+    $contentItems.forEach($item => observer.observe($item));
+  </script>
+
+</body>
+</html>
