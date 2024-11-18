@@ -29,6 +29,20 @@ const $todoTextInput = document.getElementById('todo-text');
 
 //========= 함수 정의 영역 ========//
 
+// 로컬 스토리지에 todos배열 저장해두기
+function saveTodos() {
+  localStorage.setItem('todoList', JSON.stringify(todos));
+}
+
+// 로컬 스토리에서 todos 불러와서 렌더링
+function loadTodos() {
+  const todosJson = localStorage.getItem('todoList');
+  if (todosJson) {
+    todos = JSON.parse(todosJson);
+  }
+  renderTodos();
+}
+
 // todos배열을 화면에 렌더링해주는 함수
 function renderTodos() {
   // 0. 기존 내용 전부 삭제하기
@@ -61,6 +75,9 @@ function renderTodos() {
 
     // 7. ul에 li 추가하기
     $todoListUl.append($li);
+
+    // 로컬스토리지에 저장
+    saveTodos();
   });
 }
 
@@ -200,4 +217,4 @@ $todoListUl.addEventListener('click', todoModifyHandler);
 /*
   - todos배열에 있는 객체들을 화면에 그려야 함
 */
-renderTodos();
+loadTodos();

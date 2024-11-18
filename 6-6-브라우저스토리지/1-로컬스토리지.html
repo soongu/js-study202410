@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로컬 스토리지로 테마 유지하기</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .light-mode {
+      background-color: #ffffff;
+      color: #333333;
+    }
+    .dark-mode {
+      background-color: #333333;
+      color: #ffffff;
+    }
+    .container {
+      max-width: 600px;
+      text-align: center;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body class="light-mode">
+
+  <div class="container">
+    <h1>테마 설정</h1>
+    <p>원하는 테마를 선택하세요. 설정이 저장되어 다음 방문 시에도 유지됩니다.</p>
+    <button id="toggleTheme">다크 모드로 변경</button>
+  </div>
+
+  <script>
+    const $toggleBtn = document.getElementById('toggleTheme');
+
+    $toggleBtn.addEventListener('click', e => {
+      let currentTheme; // 현재 적용된 테마
+      if (document.body.classList.contains('light-mode')) { // 현재 라이트 모드
+        document.body.classList.remove('light-mode');
+        document.body.classList.add('dark-mode');
+        $toggleBtn.textContent = '라이트 모드로 변경';
+        currentTheme = 'dark-mode';
+      } else { // 현재 다크모드
+        document.body.classList.remove('dark-mode');
+        document.body.classList.add('light-mode');
+        $toggleBtn.textContent = '다크 모드로 변경';
+        currentTheme = 'light-mode';
+      }
+
+      // 로컬 스토리지에 데이터 저장
+      localStorage.setItem('theme', currentTheme);
+    });
+
+    // 처음 이 페이지를 로딩했을 때 로컬 스토리에 있는 테마 적용
+    // 1. 로컬 스토리지에 저장된 테마 불러오기
+    const savedTheme = localStorage.getItem('theme');
+  
+    if (savedTheme) {
+      document.body.className = ''; // body클래스 전체삭제
+      document.body.classList.add(savedTheme);
+      if (savedTheme === 'dark-mode') {
+        $toggleBtn.textContent = '라이트 모드로 변경';
+      } else {
+        $toggleBtn.textContent = '다크 모드로 변경';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>포켓몬 도감 - 무한 스크롤</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    .pokemon-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .pokemon {
+      width: 150px;
+      margin: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .pokemon img {
+      width: 100px;
+      height: 100px;
+    }
+    .loading {
+      margin: 20px;
+      font-size: 18px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>포켓몬 도감</h1>
+  <div class="pokemon-container" id="pokemonContainer"></div>
+  <div class="loading" id="loading">로딩 중...</div>
+
+  <script>
+    const pokemonContainer = document.getElementById("pokemonContainer");
+    const loading = document.getElementById("loading");
+
+    let offset = 0; // 시작 위치
+    const limit = 20; // 한 번에 가져올 포켓몬 수
+    let isLoading = false; // 로딩 상태 플래그
+
+    // 포켓몬 데이터를 가져오는 함수
+    async function fetchPokemon(offset, limit) {
+      isLoading = true; // 로딩 상태 시작
+      loading.style.opacity = "1"; // 로딩 표시
+
+      try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`);
+        const data = await response.json();
+
+        // 순차적으로 fetch 요청 처리
+        for (const pokemon of data.results) {
+          const pokemonDetail = await fetch(pokemon.url).then(res => res.json());
+          const pokemonHTML = `
+            <div class="pokemon">
+              <img src="${pokemonDetail.sprites.front_default}" alt="${pokemonDetail.name}">
+              <h3>${pokemonDetail.name}</h3>
+            </div>
+          `;
+          pokemonContainer.insertAdjacentHTML("beforeend", pokemonHTML);
+        }
+      } catch (error) {
+        console.error("포켓몬 데이터를 가져오는 중 오류 발생:", error);
+      } finally {
+        isLoading = false; // 로딩 상태 종료
+        loading.style.opacity = "0"; // 로딩 숨김
+      }
+    }
+
+    // Intersection Observer로 무한 스크롤링 구현
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !isLoading) {
+          offset += limit; // 다음 배치의 시작 위치 설정
+          fetchPokemon(offset, limit); // 새로운 포켓몬 데이터 가져오기
+        }
+      });
+    }, { threshold: 0.5 });
+
+    // 로딩 엘리먼트를 계속 유지하며 감시
+    observer.observe(loading);
+
+    // 초기 데이터 로드
+    fetchPokemon(offset, limit);
+  </script>
+</body>
+</html>
